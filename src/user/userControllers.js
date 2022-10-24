@@ -11,7 +11,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
-exports.readUser = async (res) => {
+exports.readUsers = async (req, res) => { //always need both arguments even if only one is used
   try {
     const users = await User.find({});
     res.status(200).send({ user: users });
