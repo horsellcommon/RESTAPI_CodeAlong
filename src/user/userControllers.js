@@ -10,3 +10,13 @@ exports.createUser = async (req, res) => {
     res.status(418).send({ error: error.message }); // 500 - server error, 418 - I am a teapot
   }
 };
+
+exports.readUser = async (res) => {
+  try {
+    const users = await User.find({});
+    res.status(200).send({ user: users });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+};
