@@ -1,10 +1,12 @@
 const User = require("./userModel");
+const jwt = require("jsonwebtoken");
 
 exports.createUser = async (req, res) => {
   console.log(req);
   try {
     const newUser = await User.create(req.body);
-    res.status(201).send({ user: newUser });
+    const token = await jwt.sign({ _id: newUser._id }, process.env.SECRET_KEY);
+    res.status(201).send({ user: newUser, token });
   } catch (error) {
     console.log(error);
     res.status(418).send({ error: error.message }); // 500 - server error, 418 - I am a teapot
@@ -48,11 +50,17 @@ exports.deleteUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     //call new method
-    const user = await User.findByCredentials(
-      req.body.username,
-      req.body.password
-    );
-    res.status(200).send({ user: user.username });
+    // const user = await User.findByCredentials(
+    //   req.body.username,
+    //   req.body.password
+    // );
+
+    const token = await jwt.sign({ _id: req.user._id }, process.env.SECRET_KEY);
+    res.status(200).send({
+      user: req.user.username,
+      token,
+      message: "Successfully logged in.",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
