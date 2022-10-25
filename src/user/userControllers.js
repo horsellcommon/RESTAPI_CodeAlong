@@ -45,7 +45,7 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+exports.loginUser = async (req, res) => {
   try {
     //call new method
     const user = await User.findByCredentials(
